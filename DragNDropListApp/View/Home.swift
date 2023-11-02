@@ -10,7 +10,7 @@ import SwiftUI
 struct Home: View {
     // Tareas de ejemplo
     @State private var todo: [Task] = [
-        .init(title: "Edit Video", status: .working)
+        .init(title: "Edit Video", status: .todo)
     ]
     @State private var working: [Task] = [
         .init(title: "Record Video", status: .working)
@@ -24,10 +24,11 @@ struct Home: View {
     var body: some View {
         HStack(spacing: 2) {
             TodoView()
-            
+                
             WorkingView()
             
             CompletedView()
+
         }
     }
     
@@ -61,8 +62,7 @@ struct Home: View {
                 Text(task.title)
                     .font(.callout)
                     .padding(.horizontal, 15)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .frame(height: size.height)
+                    .frame(width: size.width, height: size.height, alignment: .leading)
                     .background(.white)
                     .contentShape(.dragPreview, .rect(cornerRadius: 10))
                     .onAppear(perform: {
@@ -150,6 +150,16 @@ struct Home: View {
             .navigationTitle("To-Do")
             .frame(maxWidth: .infinity)
             .background(.ultraThinMaterial)
+            .contentShape(.rect)
+            .dropDestination(for: String.self) { items, location in
+                // Appending to the last of the Current List
+                withAnimation(.snappy) {
+                    appendTask(.todo)
+                }
+                return true
+            } isTargeted: { _ in
+                
+            }
         }
     }
     
@@ -163,6 +173,15 @@ struct Home: View {
             .navigationTitle("Working")
             .frame(maxWidth: .infinity)
             .background(.ultraThinMaterial)
+            .dropDestination(for: String.self) { items, location in
+                // Appending to the last of the Current List
+                withAnimation(.snappy) {
+                    appendTask(.working)
+                }
+                return true
+            } isTargeted: { _ in
+                
+            }
         }
     }
     
@@ -175,6 +194,15 @@ struct Home: View {
             .navigationTitle("Completed")
             .frame(maxWidth: .infinity)
             .background(.ultraThinMaterial)
+            .dropDestination(for: String.self) { items, location in
+                // Appending to the last of the Current List
+                withAnimation(.snappy) {
+                    appendTask(.completed)
+                }
+                return true
+            } isTargeted: { _ in
+                
+            }
         }
     }
 }
